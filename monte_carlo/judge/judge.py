@@ -21,12 +21,13 @@ def start(zcontext, in_url, pythagoras_url, out_url):
     unit = 2 ** (B * 2)  # 2^64-1
     while True:
         bits = isock.recv_string()
+        print("Received: " + bits)
         n, m = int(bits[::2], 2), int(bits[1::2], 2)
         psock.send_json((n, m))
         sumsquares = psock.recv_json()
         if sumsquares < unit:
-            # print("Judge send Y to tally")
+            print("Sending Yes")
             osock.send_string('Y')
         else:
-            # print("Judge send N to tally")
+            print("Sending No")
             osock.send_string('N')
