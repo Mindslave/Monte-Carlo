@@ -14,13 +14,18 @@ def start(zcontext, url, listen_client_url):
         data_points = isock.recv_string()
         print("Received data from client: " + data_points)
         break
+    isock.close()
 
     zsock = zcontext.socket(zmq.PUB)
     zsock.bind(url)
-    while True:
-        zsock.send_string(ones_and_zeros(data_points))
-        print("sending: " + str(ones_and_zeros(data_points)))
-        time.sleep(0.001)
+    try:
+        for i in range(int(data_points)):
+            zsock.send_string(ones_and_zeros(int(B) * 2))
+            print("sending: " + str(ones_and_zeros(int(B) * 2)))
+            time.sleep(0.01)
+    except ValueError:
+        print("Please enter a valid integer value for the number of data points")
+        exit(1)
 
 
 def ones_and_zeros(data_points):
